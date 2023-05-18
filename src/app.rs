@@ -1,7 +1,9 @@
 use iced::{
     executor,
+    keyboard::{self, KeyCode},
+    subscription,
     widget::{button, column, container, row, text, Text},
-    window, Application, Command, Element, Theme,
+    window, Application, Command, Element, Event, Theme,
 };
 
 use crate::calculator::Calculator;
@@ -13,14 +15,14 @@ pub(crate) struct App {
 }
 
 #[derive(Debug, Clone)]
-#[allow(dead_code)]
 pub(crate) enum Message {
     None,
     Calculate,
     SendToEquation(String),
+    Event(Event),
     Scientific,
     Clear,
-    Quit,
+    Exit,
 }
 
 impl Application for App {
@@ -32,7 +34,7 @@ impl Application for App {
 
     type Flags = ();
 
-    fn new(_flags: Self::Flags) -> (Self, iced::Command<Self::Message>) {
+    fn new(_flags: Self::Flags) -> (Self, Command<Message>) {
         (
             Self {
                 calculator: Calculator::new(),
@@ -46,20 +48,102 @@ impl Application for App {
         String::from("Calculator")
     }
 
+    fn theme(&self) -> Self::Theme {
+        Theme::Dark
+    }
+
     fn update(&mut self, message: Self::Message) -> Command<Message> {
         match message {
-            Message::None => unimplemented!(),
+            Message::None => Command::none(),
             Message::Calculate => {
                 self.calculator.push_to_equation(" )");
                 self.calculator.calculate();
+                Command::none()
             }
-            Message::SendToEquation(value) => self.calculator.push_to_equation(value.as_str()),
-            Message::Quit => return window::close(),
-            Message::Scientific => self.show_scientific = !self.show_scientific,
-            Message::Clear => self.calculator.clear(),
-        };
+            Message::SendToEquation(value) => {
+                self.calculator.push_to_equation(value.as_str());
+                Command::none()
+            }
+            Message::Exit => window::close(),
+            Message::Scientific => {
+                self.show_scientific = !self.show_scientific;
+                Command::none()
+            }
+            Message::Clear => {
+                self.calculator.clear();
+                Command::none()
+            }
+            Message::Event(e) => {
+                if let Event::Keyboard(keyboard::Event::KeyPressed { key_code, .. }) = e {
+                    match key_code {
+                        KeyCode::Key1 | KeyCode::Numpad1 => {
+                            self.calculator.push_to_equation("1");
+                        }
+                        KeyCode::Key2 | KeyCode::Numpad2 => {
+                            self.calculator.push_to_equation("2");
+                        }
+                        KeyCode::Key3 | KeyCode::Numpad3 => {
+                            self.calculator.push_to_equation("3");
+                        }
+                        KeyCode::Key4 | KeyCode::Numpad4 => {
+                            self.calculator.push_to_equation("4");
+                        }
+                        KeyCode::Key5 | KeyCode::Numpad5 => {
+                            self.calculator.push_to_equation("5");
+                        }
+                        KeyCode::Key6 | KeyCode::Numpad6 => {
+                            self.calculator.push_to_equation("6");
+                        }
+                        KeyCode::Key7 | KeyCode::Numpad7 => {
+                            self.calculator.push_to_equation("7");
+                        }
+                        KeyCode::Key8 | KeyCode::Numpad8 => {
+                            self.calculator.push_to_equation("8");
+                        }
+                        KeyCode::Key9 | KeyCode::Numpad9 => {
+                            self.calculator.push_to_equation("9");
+                        }
+                        KeyCode::Key0 | KeyCode::Numpad0 => {
+                            self.calculator.push_to_equation("0");
+                        }
+                        KeyCode::Escape => {
+                            self.calculator.clear();
+                        }
+                        KeyCode::Backspace => {
+                            self.calculator.backspace();
+                        }
+                        KeyCode::Enter
+                        | KeyCode::NumpadEnter
+                        | KeyCode::Equals
+                        | KeyCode::NumpadEquals => {
+                            self.calculator.push_to_equation(" )");
+                            self.calculator.calculate();
+                        }
+                        KeyCode::Asterisk | KeyCode::NumpadMultiply => {
+                            self.calculator.push_to_equation(" * ");
+                        }
+                        KeyCode::Minus | KeyCode::NumpadSubtract => {
+                            self.calculator.push_to_equation(" - ");
+                        }
+                        KeyCode::Period | KeyCode::NumpadDecimal => {
+                            self.calculator.push_to_equation(".");
+                        }
+                        KeyCode::Plus | KeyCode::NumpadAdd => {
+                            self.calculator.push_to_equation(" + ");
+                        }
+                        KeyCode::Slash | KeyCode::NumpadDivide => {
+                            self.calculator.push_to_equation(" / ");
+                        }
+                        _ => (),
+                    };
+                }
+                Command::none()
+            }
+        }
+    }
 
-        Command::none()
+    fn subscription(&self) -> iced::Subscription<Self::Message> {
+        subscription::events().map(Message::Event)
     }
 
     fn view(&self) -> Element<Message> {
@@ -70,7 +154,7 @@ impl Application for App {
                 button(text("Calculate")).on_press(Message::Calculate),
                 button(text("Clear")).on_press(Message::Clear),
                 button(text("Scientific")).on_press(Message::Scientific),
-                button(text("Quit")).on_press(Message::Quit),
+                button(text("Quit")).on_press(Message::Exit),
             ]
             .align_items(iced::Alignment::Center),
             row![

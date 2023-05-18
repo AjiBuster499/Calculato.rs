@@ -141,6 +141,11 @@ impl Calculator {
         self.equation.clear();
         self.display_equation.clear();
     }
+
+    /// Removes the last item in the equation
+    pub fn backspace(&mut self) {
+        // TODO: This is a bit more complex
+    }
 }
 
 // Tests for the Calculator struct
