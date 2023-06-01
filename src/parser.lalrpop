@@ -1,5 +1,4 @@
 use std::str::FromStr;
-use ast::{Expr, Opcode};
 
 grammar;
 
@@ -20,8 +19,5 @@ Term: f32 = {
     "(" <Expr> ")",
 };
 
-Num: f32 = {
-    r"[0-9]+\.?[0-9]*" => f32::from_str(<>).unwrap(),
-};
+Num: f32 = r"[0-9]+\.?[0-9]*" => f32::from_str(<>).unwrap();
 
-# vim: ft=lalrpop:

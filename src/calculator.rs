@@ -1,3 +1,5 @@
+lalrpop_mod!(pub parser);
+
 #[derive(Debug, Default)]
 pub(crate) struct Calculator {
     /// The actual equation
