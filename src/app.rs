@@ -1,3 +1,4 @@
+#![allow(unused_imports)]
 use iced::{
     executor,
     keyboard::{self, KeyCode},
@@ -10,6 +11,7 @@ use crate::calculator::Calculator;
 
 pub(crate) struct App {
     calculator: Calculator,
+    display_equation: String,
     scientific: bool,
 }
 
@@ -21,6 +23,7 @@ pub(crate) enum Message {
     Event(Event),
     Scientific,
     Clear,
+    Backspace,
     Exit,
 }
 
@@ -37,6 +40,7 @@ impl Application for App {
         (
             Self {
                 calculator: Calculator::new(),
+                display_equation: String::from(" "),
                 scientific: false,
             },
             Command::none(),
@@ -55,12 +59,12 @@ impl Application for App {
         match message {
             Message::None => Command::none(),
             Message::Calculate => {
-                self.calculator.push_to_equation(" )");
-                self.calculator.calculate();
+                let answer = self.calculator.calculate(&self.display_equation);
+                self.display_equation = answer.to_string();
                 Command::none()
             }
-            Message::SendToEquation(value) => {
-                self.calculator.push_to_equation(value.as_str());
+            Message::SendToEquation(s) => {
+                self.display_equation.push_str(&s);
                 Command::none()
             }
             Message::Exit => window::close(),
@@ -69,10 +73,16 @@ impl Application for App {
                 Command::none()
             }
             Message::Clear => {
-                self.calculator.clear();
+                self.display_equation.clear();
                 Command::none()
             }
-            Message::Event(e) => {
+            Message::Backspace => {
+                self.display_equation.pop();
+                Command::none()
+            }
+            Message::Event(_) => Command::none(),
+            // TODO: Find a better way to do this.
+            /* Message::Event(e) => {
                 if let Event::Keyboard(keyboard::Event::KeyPressed { key_code, .. }) = e {
                     match key_code {
                         KeyCode::Key1 | KeyCode::Numpad1 => {
@@ -137,7 +147,7 @@ impl Application for App {
                     };
                 }
                 Command::none()
-            }
+            } */
         }
     }
 
@@ -146,13 +156,14 @@ impl Application for App {
     }
 
     fn view(&self) -> Element<Message> {
-        let equation: Text = text(self.calculator.display_equation.clone());
+        let equation: Text = text(&self.display_equation);
         let content = column![
             equation,
             row![
                 button(text("Calculate")).on_press(Message::Calculate),
                 button(text("Clear")).on_press(Message::Clear),
                 button(text("Scientific")).on_press(Message::Scientific),
+                button(text("Backspace")).on_press(Message::Backspace),
                 button(text("Quit")).on_press(Message::Exit),
             ]
             .align_items(iced::Alignment::Center),
