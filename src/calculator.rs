@@ -1,20 +1,33 @@
 lalrpop_mod!(pub parser);
 
-#[derive(Debug, Default)]
 pub(crate) struct Calculator {
     /// The actual equation
     equation: String,
+
     /// What is displayed on the calculator, used to hide the parentheses that are at the beginning
     /// to open the global scope.
     pub display_equation: String,
-    /// Flag to display the scientific functions
-    pub scientific: bool,
+
+    /// Parser
+    parser: parser::ExprParser,
+}
+
+// Implement Parser Functions
+impl Calculator {
+    // TODO: Rename all these once confirmed working
+    pub fn parser_calculate(&self, equation: String) -> f32 {
+        self.parser.parse(&equation).unwrap()
+    }
 }
 
 impl Calculator {
     /// Generic new function
     pub fn new() -> Self {
-        Self::default()
+        Self {
+            equation: String::new(),
+            display_equation: String::new(),
+            parser: parser::ExprParser::new(),
+        }
     }
 
     /// Add some string to the equation.

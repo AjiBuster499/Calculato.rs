@@ -1,4 +1,5 @@
 use std::str::FromStr;
+use lalrpop_util::ParseError;
 
 grammar;
 
@@ -19,5 +20,10 @@ Term: f32 = {
     "(" <Expr> ")",
 };
 
-Num: f32 = r"[0-9]+\.?[0-9]*" => f32::from_str(<>).unwrap();
+Num: f32 = {
+    r"[0-9]+\.?[0-9]*" =>? f32::from_str(<>)
+        .map_err(|_| ParseError::User {
+            error: "Error while parsing number"
+        })
+};
 

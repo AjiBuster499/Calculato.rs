@@ -8,9 +8,9 @@ use iced::{
 
 use crate::calculator::Calculator;
 
-#[derive(Debug)]
 pub(crate) struct App {
     calculator: Calculator,
+    scientific: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -37,6 +37,7 @@ impl Application for App {
         (
             Self {
                 calculator: Calculator::new(),
+                scientific: false,
             },
             Command::none(),
         )
@@ -64,7 +65,7 @@ impl Application for App {
             }
             Message::Exit => window::close(),
             Message::Scientific => {
-                self.calculator.scientific = !self.calculator.scientific;
+                self.scientific = !self.scientific;
                 Command::none()
             }
             Message::Clear => {
