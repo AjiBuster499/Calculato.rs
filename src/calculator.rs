@@ -38,6 +38,9 @@ mod tests {
         let calculator = Calculator::new();
         let equation_to_parse = "1.2 + 3.5";
         let answer = calculator.calculate(equation_to_parse);
-        assert!(answer == (1.2 + 3.5))
+        assert!(answer == (1.2 + 3.5));
+        let equation = ".3 + 1";
+        let answer = calculator.calculate(equation);
+        assert!(answer == (0.3 + 1f32));
     }
 }

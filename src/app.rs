@@ -1,4 +1,3 @@
-#![allow(unused_imports)]
 use iced::{
     executor,
     keyboard::{self, KeyCode},
@@ -19,7 +18,7 @@ pub(crate) struct App {
 pub(crate) enum Message {
     None,
     Calculate,
-    SendToEquation(String),
+    SendToEquation(char),
     Event(Event),
     Scientific,
     Clear,
@@ -63,8 +62,8 @@ impl Application for App {
                 self.display_equation = answer.to_string();
                 Command::none()
             }
-            Message::SendToEquation(s) => {
-                self.display_equation.push_str(&s);
+            Message::SendToEquation(c) => {
+                self.display_equation.push(c);
                 Command::none()
             }
             Message::Exit => window::close(),
@@ -80,74 +79,73 @@ impl Application for App {
                 self.display_equation.pop();
                 Command::none()
             }
-            Message::Event(_) => Command::none(),
             // TODO: Find a better way to do this.
-            /* Message::Event(e) => {
+            Message::Event(e) => {
                 if let Event::Keyboard(keyboard::Event::KeyPressed { key_code, .. }) = e {
                     match key_code {
                         KeyCode::Key1 | KeyCode::Numpad1 => {
-                            self.calculator.push_to_equation("1");
+                            self.display_equation.push('1');
                         }
                         KeyCode::Key2 | KeyCode::Numpad2 => {
-                            self.calculator.push_to_equation("2");
+                            self.display_equation.push('2');
                         }
                         KeyCode::Key3 | KeyCode::Numpad3 => {
-                            self.calculator.push_to_equation("3");
+                            self.display_equation.push('3');
                         }
                         KeyCode::Key4 | KeyCode::Numpad4 => {
-                            self.calculator.push_to_equation("4");
+                            self.display_equation.push('4');
                         }
                         KeyCode::Key5 | KeyCode::Numpad5 => {
-                            self.calculator.push_to_equation("5");
+                            self.display_equation.push('5');
                         }
                         KeyCode::Key6 | KeyCode::Numpad6 => {
-                            self.calculator.push_to_equation("6");
+                            self.display_equation.push('6');
                         }
                         KeyCode::Key7 | KeyCode::Numpad7 => {
-                            self.calculator.push_to_equation("7");
+                            self.display_equation.push('7');
                         }
                         KeyCode::Key8 | KeyCode::Numpad8 => {
-                            self.calculator.push_to_equation("8");
+                            self.display_equation.push('8');
                         }
                         KeyCode::Key9 | KeyCode::Numpad9 => {
-                            self.calculator.push_to_equation("9");
+                            self.display_equation.push('9');
                         }
                         KeyCode::Key0 | KeyCode::Numpad0 => {
-                            self.calculator.push_to_equation("0");
+                            self.display_equation.push('0');
                         }
                         KeyCode::Escape => {
-                            self.calculator.clear();
+                            self.display_equation.clear();
                         }
                         KeyCode::Backspace => {
-                            self.calculator.backspace();
+                            self.display_equation.pop();
                         }
                         KeyCode::Enter
                         | KeyCode::NumpadEnter
                         | KeyCode::Equals
                         | KeyCode::NumpadEquals => {
-                            self.calculator.push_to_equation(" )");
-                            self.calculator.calculate();
-                        }
-                        KeyCode::Asterisk | KeyCode::NumpadMultiply => {
-                            self.calculator.push_to_equation(" * ");
-                        }
-                        KeyCode::Minus | KeyCode::NumpadSubtract => {
-                            self.calculator.push_to_equation(" - ");
-                        }
-                        KeyCode::Period | KeyCode::NumpadDecimal => {
-                            self.calculator.push_to_equation(".");
+                            let answer = self.calculator.calculate(&self.display_equation);
+                            self.display_equation = answer.to_string();
                         }
                         KeyCode::Plus | KeyCode::NumpadAdd => {
-                            self.calculator.push_to_equation(" + ");
+                            self.display_equation.push('+');
+                        }
+                        KeyCode::Minus | KeyCode::NumpadSubtract => {
+                            self.display_equation.push('-');
+                        }
+                        KeyCode::Asterisk | KeyCode::NumpadMultiply => {
+                            self.display_equation.push('*');
                         }
                         KeyCode::Slash | KeyCode::NumpadDivide => {
-                            self.calculator.push_to_equation(" / ");
+                            self.display_equation.push('/');
+                        }
+                        KeyCode::Period | KeyCode::NumpadDecimal => {
+                            self.display_equation.push('.');
                         }
                         _ => (),
                     };
                 }
                 Command::none()
-            } */
+            }
         }
     }
 
@@ -168,32 +166,32 @@ impl Application for App {
             ]
             .align_items(iced::Alignment::Center),
             row![
-                button(text("1")).on_press(Message::SendToEquation(String::from("1"))),
-                button(text("2")).on_press(Message::SendToEquation(String::from("2"))),
-                button(text("3")).on_press(Message::SendToEquation(String::from("3"))),
-                button(text("+")).on_press(Message::SendToEquation(String::from(" + "))),
+                button(text("1")).on_press(Message::SendToEquation('1')),
+                button(text("2")).on_press(Message::SendToEquation('2')),
+                button(text("3")).on_press(Message::SendToEquation('3')),
+                button(text("+")).on_press(Message::SendToEquation('+')),
             ]
             .align_items(iced::Alignment::Center),
             row![
-                button(text("4")).on_press(Message::SendToEquation(String::from("4"))),
-                button(text("5")).on_press(Message::SendToEquation(String::from("5"))),
-                button(text("6")).on_press(Message::SendToEquation(String::from("6"))),
-                button(text("-")).on_press(Message::SendToEquation(String::from(" - "))),
+                button(text("4")).on_press(Message::SendToEquation('4')),
+                button(text("5")).on_press(Message::SendToEquation('5')),
+                button(text("6")).on_press(Message::SendToEquation('6')),
+                button(text("-")).on_press(Message::SendToEquation('-')),
             ]
             .align_items(iced::Alignment::Center),
             row![
-                button(text("7")).on_press(Message::SendToEquation(String::from("7"))),
-                button(text("8")).on_press(Message::SendToEquation(String::from("8"))),
-                button(text("9")).on_press(Message::SendToEquation(String::from("9"))),
-                button(text("*")).on_press(Message::SendToEquation(String::from(" * "))),
+                button(text("7")).on_press(Message::SendToEquation('7')),
+                button(text("8")).on_press(Message::SendToEquation('8')),
+                button(text("9")).on_press(Message::SendToEquation('9')),
+                button(text("*")).on_press(Message::SendToEquation('*')),
             ]
             .align_items(iced::Alignment::Center),
             row![
                 // TODO: Implement Negatives?
                 button(text("+/-")).on_press(Message::None),
-                button(text("0")).on_press(Message::SendToEquation(String::from("0"))),
-                button(text(".")).on_press(Message::SendToEquation(String::from("."))),
-                button(text("/")).on_press(Message::SendToEquation(String::from(" / "))),
+                button(text("0")).on_press(Message::SendToEquation('0')),
+                button(text(".")).on_press(Message::SendToEquation('.')),
+                button(text("/")).on_press(Message::SendToEquation('/')),
             ]
             .align_items(iced::Alignment::Center),
         ]
