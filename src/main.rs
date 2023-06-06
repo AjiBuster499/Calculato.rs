@@ -5,6 +5,12 @@ lalrpop_mod!(pub parser);
 mod app;
 mod calculator;
 
+use app::App;
+use iced::{Application, Settings};
+
 fn main() -> iced::Result {
-    <app::App as iced::Application>::run(iced::Settings::default())
+    App::run(Settings {
+        id: Some(String::from("CalculatoRS")),
+        ..Settings::default()
+    })
 }
