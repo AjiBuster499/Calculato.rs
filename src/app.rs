@@ -3,7 +3,7 @@ use iced::{
     keyboard::{self, KeyCode},
     subscription,
     widget::{button, column, container, row, text, Text},
-    window, Application, Command, Element, Event, Theme,
+    window, Application, Command, Element, Event, Length, Theme,
 };
 
 use crate::calculator::Calculator;
@@ -158,11 +158,11 @@ impl Application for App {
         let content = column![
             equation,
             row![
-                button(text("Calculate")).on_press(Message::Calculate),
-                button(text("Clear")).on_press(Message::Clear),
-                button(text("Scientific")).on_press(Message::Scientific),
-                button(text("Backspace")).on_press(Message::Backspace),
-                button(text("Quit")).on_press(Message::Exit),
+                button(text("=")).on_press(Message::Calculate),
+                button(text("C")).on_press(Message::Clear),
+                button(text("Sci")).on_press(Message::Scientific),
+                button(text("<-")).on_press(Message::Backspace),
+                button(text("X")).on_press(Message::Exit),
             ]
             .align_items(iced::Alignment::Center),
             row![
@@ -196,6 +196,11 @@ impl Application for App {
             .align_items(iced::Alignment::Center),
         ]
         .align_items(iced::Alignment::Center);
-        container(content).into()
+        container(content)
+            .center_x()
+            .center_y()
+            .width(Length::Fill)
+            .height(Length::Fill)
+            .into()
     }
 }
