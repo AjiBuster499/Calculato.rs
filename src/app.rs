@@ -154,15 +154,17 @@ impl Application for App {
     }
 
     fn view(&self) -> Element<Message> {
-        let equation: Text = text(&self.display_equation);
+        let equation: Text = text(&self.display_equation)
+            .horizontal_alignment(iced::alignment::Horizontal::Center)
+            .vertical_alignment(iced::alignment::Vertical::Center)
+            .width(250);
         let content = column![
-            equation,
+            row![equation, button(text("X")).on_press(Message::Exit),],
             row![
                 button(text("=")).on_press(Message::Calculate),
                 button(text("C")).on_press(Message::Clear),
                 button(text("Sci")).on_press(Message::Scientific),
                 button(text("<-")).on_press(Message::Backspace),
-                button(text("X")).on_press(Message::Exit),
             ]
             .align_items(iced::Alignment::Center),
             row![
@@ -195,6 +197,8 @@ impl Application for App {
             ]
             .align_items(iced::Alignment::Center),
         ]
+        .width(300)
+        .height(300)
         .align_items(iced::Alignment::Center);
         container(content)
             .center_x()
