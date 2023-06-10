@@ -1,4 +1,5 @@
 use iced::{
+    alignment::{Alignment, Horizontal, Vertical},
     executor,
     keyboard::{self, KeyCode},
     subscription,
@@ -155,51 +156,91 @@ impl Application for App {
 
     fn view(&self) -> Element<Message> {
         let equation: Text = text(&self.display_equation)
-            .horizontal_alignment(iced::alignment::Horizontal::Center)
-            .vertical_alignment(iced::alignment::Vertical::Center)
-            .width(250);
+            .horizontal_alignment(Horizontal::Center)
+            .vertical_alignment(Vertical::Center)
+            .width(Length::Fill);
+        // Row containing the Equation
+        let eq_row = row![equation, button(text("X")).on_press(Message::Exit)];
         let content = column![
-            row![equation, button(text("X")).on_press(Message::Exit),],
+            eq_row,
             row![
-                button(text("=")).on_press(Message::Calculate),
-                button(text("C")).on_press(Message::Clear),
-                button(text("Sci")).on_press(Message::Scientific),
-                button(text("<-")).on_press(Message::Backspace),
+                button(text("C").horizontal_alignment(Horizontal::Center))
+                    .on_press(Message::Clear)
+                    .width(Length::Fill),
+                button(text("Sci"))
+                    .on_press(Message::Scientific)
+                    .width(Length::Fill),
+                button(text("/"))
+                    .on_press(Message::SendToEquation('/'))
+                    .width(Length::Fill),
             ]
-            .align_items(iced::Alignment::Center),
+            .align_items(Alignment::Center),
             row![
-                button(text("1")).on_press(Message::SendToEquation('1')),
-                button(text("2")).on_press(Message::SendToEquation('2')),
-                button(text("3")).on_press(Message::SendToEquation('3')),
-                button(text("+")).on_press(Message::SendToEquation('+')),
+                button(text("1"))
+                    .on_press(Message::SendToEquation('1'))
+                    .width(Length::Fill),
+                button(text("2"))
+                    .on_press(Message::SendToEquation('2'))
+                    .width(Length::Fill),
+                button(text("3"))
+                    .on_press(Message::SendToEquation('3'))
+                    .width(Length::Fill),
+                button(text("+"))
+                    .on_press(Message::SendToEquation('+'))
+                    .width(Length::Fill),
             ]
-            .align_items(iced::Alignment::Center),
+            .align_items(Alignment::Center),
             row![
-                button(text("4")).on_press(Message::SendToEquation('4')),
-                button(text("5")).on_press(Message::SendToEquation('5')),
-                button(text("6")).on_press(Message::SendToEquation('6')),
-                button(text("-")).on_press(Message::SendToEquation('-')),
+                button(text("4"))
+                    .on_press(Message::SendToEquation('4'))
+                    .width(Length::Fill),
+                button(text("5"))
+                    .on_press(Message::SendToEquation('5'))
+                    .width(Length::Fill),
+                button(text("6"))
+                    .on_press(Message::SendToEquation('6'))
+                    .width(Length::Fill),
+                button(text("-"))
+                    .on_press(Message::SendToEquation('-'))
+                    .width(Length::Fill),
             ]
-            .align_items(iced::Alignment::Center),
+            .align_items(Alignment::Center),
             row![
-                button(text("7")).on_press(Message::SendToEquation('7')),
-                button(text("8")).on_press(Message::SendToEquation('8')),
-                button(text("9")).on_press(Message::SendToEquation('9')),
-                button(text("*")).on_press(Message::SendToEquation('*')),
+                button(text("7"))
+                    .on_press(Message::SendToEquation('7'))
+                    .width(Length::Fill),
+                button(text("8"))
+                    .on_press(Message::SendToEquation('8'))
+                    .width(Length::Fill),
+                button(text("9"))
+                    .on_press(Message::SendToEquation('9'))
+                    .width(Length::Fill),
+                button(text("*"))
+                    .on_press(Message::SendToEquation('*'))
+                    .width(Length::Fill),
             ]
-            .align_items(iced::Alignment::Center),
+            .align_items(Alignment::Center),
             row![
-                // TODO: Implement Negatives?
-                button(text("+/-")).on_press(Message::None),
-                button(text("0")).on_press(Message::SendToEquation('0')),
-                button(text(".")).on_press(Message::SendToEquation('.')),
-                button(text("/")).on_press(Message::SendToEquation('/')),
+                // // TODO: Implement Negatives?
+                // button(text("+/-"))
+                //     .on_press(Message::None)
+                //     .width(Length::Fill),
+                button(text("0"))
+                    .on_press(Message::SendToEquation('0'))
+                    .width(Length::Fill),
+                button(text("."))
+                    .on_press(Message::SendToEquation('.'))
+                    .width(Length::Fill),
+                button(text("<-"))
+                    .on_press(Message::Backspace)
+                    .width(Length::Fill),
+                button(text("="))
+                    .on_press(Message::Calculate)
+                    .width(Length::Fill),
             ]
-            .align_items(iced::Alignment::Center),
+            .align_items(Alignment::Center)
         ]
-        .width(300)
-        .height(300)
-        .align_items(iced::Alignment::Center);
+        .align_items(Alignment::Center);
         container(content)
             .center_x()
             .center_y()
