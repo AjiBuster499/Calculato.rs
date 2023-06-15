@@ -6,6 +6,7 @@ grammar;
 pub Expr: f32 = {
     <l:Expr> "+" <r:Factor> => l + r,
     <l:Expr> "-" <r:Factor> => l - r,
+    "-" <n:Num> => n * -1.0,
     Factor,
 };
 

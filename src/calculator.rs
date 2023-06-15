@@ -43,4 +43,24 @@ mod tests {
         let answer = calculator.calculate(equation);
         assert!(answer == (0.3 + 1f32));
     }
+
+    #[test]
+    fn negative_numbers_test() {
+        let calculator = Calculator::new();
+        let equation_to_parse = "-1";
+        let answer = calculator.calculate(equation_to_parse);
+        assert!(answer == -1f32);
+        let equation_to_parse = "0-1";
+        let answer = calculator.calculate(equation_to_parse);
+        assert!(answer == -1f32);
+    }
+
+    #[test]
+    #[should_panic]
+    fn multiple_negatives_test() {
+        let calculator = Calculator::new();
+        let equation_to_parse = "--1";
+        let answer = calculator.calculate(equation_to_parse);
+        assert!(answer == 1f32)
+    }
 }
