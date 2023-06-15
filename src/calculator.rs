@@ -56,6 +56,14 @@ mod tests {
     }
 
     #[test]
+    fn negative_arithmetic_test() {
+        let calculator = Calculator::new();
+        let equation_to_parse = "2*-1";
+        let answer = calculator.calculate(equation_to_parse);
+        assert!(answer == -2.0);
+    }
+
+    #[test]
     #[should_panic]
     fn multiple_negatives_test() {
         let calculator = Calculator::new();
