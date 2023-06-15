@@ -2,12 +2,9 @@
 name = "calculator"
 version = "0.1.0"
 edition = "2021"
-build = "build.rs"
 
 [dependencies]
 iced = "0.9.0"
-lalrpop-util = { version = "0.20.0", features = ["lexer"] }
-regex = "1"
+pest = "2"
+pest_derive = "2"
 
-[build-dependencies]
-lalrpop = "0.20.0"

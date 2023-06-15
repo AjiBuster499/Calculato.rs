@@ -1,0 +1,11 @@
+number = @{ ASCII_DIGIT+ ~ "."? ~ ASCII_DIGIT* }
+
+operation = _{ add | subtract | divide | multiply }
+	add = { "+" }
+    subtract = { "-" }
+    divide = { "/" }
+    multiply = { "*" }
+
+expr = { term ~ (operation ~ term)* }
+term = _{number | "(" ~ expr ~ ")" }
+calculation = _{ SOI ~ expr ~ EOI }
