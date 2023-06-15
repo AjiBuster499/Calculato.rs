@@ -7,4 +7,5 @@ edition = "2021"
 iced = "0.9.0"
 pest = "2"
 pest_derive = "2"
+lazy_static = "1.4.0"
 

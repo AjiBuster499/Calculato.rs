@@ -183,6 +183,7 @@ name = "calculator"
 version = "0.1.0"
 dependencies = [
  "iced",
+ "lazy_static",
  "pest",
  "pest_derive",
 ]
