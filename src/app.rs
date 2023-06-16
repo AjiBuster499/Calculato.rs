@@ -39,7 +39,7 @@ impl Application for App {
     fn new(_flags: Self::Flags) -> (Self, Command<Message>) {
         (
             Self {
-                calculator: Calculator::new(),
+                calculator: Calculator,
                 display_equation: String::from(" "),
                 scientific: false,
             },
