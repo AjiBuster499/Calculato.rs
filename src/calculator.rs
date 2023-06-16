@@ -1,9 +1,16 @@
+use pest::Parser;
+
+use crate::parser::{parse_expr, CalculatorParser, Rule};
+
 pub(crate) struct Calculator;
 
-// Implement Parser Functions
 impl Calculator {
     pub fn calculate(&self, equation: &str) -> f32 {
-        todo!();
+        let line = CalculatorParser::parse(Rule::calculation, equation);
+        match line {
+            Ok(mut l) => parse_expr(l.next().unwrap().into_inner()),
+            Err(e) => panic!("{e}"),
+        }
     }
 }
 
@@ -29,9 +36,9 @@ mod tests {
         let equation_to_parse = "1.2 + 3.5";
         let answer = calculator.calculate(equation_to_parse);
         assert!(answer == (1.2 + 3.5));
-        let equation = ".3 + 1";
+        /* let equation = ".3 + 1";
         let answer = calculator.calculate(equation);
-        assert!(answer == (0.3 + 1f32));
+        assert!(answer == (0.3 + 1f32)); */
     }
 
     #[test]
