@@ -1,14 +1,21 @@
-operation    = _{ add | subtract | divide | multiply | pow }
-	add      = { "+" }
-    subtract = { "-" }
-    divide   = { "/" }
-    multiply = { "*" }
-    pow      = { "^" }
+operation     = _{ add | subtract | divide | multiply |
+                   pow }
+	add       = {   "+"   }
+    subtract  = {   "-"   }
+    divide    = {   "/"   }
+    multiply  = {   "*"   }
+    pow       = {   "^"   }
+
+unary_operation = _{ log | ln | factorial }
+    log       = { "log" }
+    ln        = { "ln" }
+    factorial = { "!" }
+
 
 num          = @{ "-"? ~ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ |
                    ASCII_DIGIT) ~ "."? ~ ASCII_DIGIT* }
                   
-term         = _{ num | "(" ~ expr ~ ")"  }
+term         = _{ unary_operation? ~ (num | "(" ~ expr ~ ")") }
 expr         = { term ~ (operation ~ term)* }
 calculation  = _{ SOI ~ expr ~ EOI }
 

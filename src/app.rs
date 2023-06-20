@@ -7,10 +7,9 @@ use iced::{
     window, Application, Command, Element, Event, Length, Theme,
 };
 
-use crate::calculator::Calculator;
+use crate::parser::calculate;
 
 pub(crate) struct App {
-    calculator: Calculator,
     display_equation: String,
 }
 
@@ -36,7 +35,6 @@ impl Application for App {
     fn new(_flags: Self::Flags) -> (Self, Command<Message>) {
         (
             Self {
-                calculator: Calculator,
                 display_equation: String::new(),
             },
             Command::none(),
@@ -54,7 +52,7 @@ impl Application for App {
     fn update(&mut self, message: Self::Message) -> Command<Message> {
         match message {
             Message::Calculate => {
-                let answer = self.calculator.calculate(&self.display_equation);
+                let answer = calculate(&self.display_equation);
                 self.display_equation = answer.to_string();
                 Command::none()
             }
@@ -115,7 +113,7 @@ impl Application for App {
                         | KeyCode::NumpadEnter
                         | KeyCode::Equals
                         | KeyCode::NumpadEquals => {
-                            let answer = self.calculator.calculate(&self.display_equation);
+                            let answer = calculate(&self.display_equation);
                             self.display_equation = answer.to_string();
                         }
                         KeyCode::Plus | KeyCode::NumpadAdd => {
@@ -161,6 +159,12 @@ impl Application for App {
                 .width(Length::Fill),
             button(text("log").horizontal_alignment(Horizontal::Center))
                 .on_press(Message::SendToEquation("log(".to_string()))
+                .width(Length::Fill),
+            button(text("ln").horizontal_alignment(Horizontal::Center))
+                .on_press(Message::SendToEquation("ln(".to_string()))
+                .width(Length::Fill),
+            button(text("!").horizontal_alignment(Horizontal::Center))
+                .on_press(Message::SendToEquation("!".to_string()))
                 .width(Length::Fill),
         ]
         .align_items(Alignment::Center),];
