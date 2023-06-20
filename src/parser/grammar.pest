@@ -1,14 +1,15 @@
-operation    = _{ add | subtract | divide | multiply }
+operation    = _{ add | subtract | divide | multiply | pow }
 	add      = { "+" }
     subtract = { "-" }
     divide   = { "/" }
     multiply = { "*" }
+    pow      = { "^" }
 
 num          = @{ "-"? ~ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ |
                    ASCII_DIGIT) ~ "."? ~ ASCII_DIGIT* }
                   
-expr         = { term ~ (operation ~ term)* }
 term         = _{ num | "(" ~ expr ~ ")"  }
+expr         = { term ~ (operation ~ term)* }
 calculation  = _{ SOI ~ expr ~ EOI }
 
 WHITESPACE = _{ " " }

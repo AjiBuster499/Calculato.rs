@@ -15,7 +15,6 @@ lazy_static::lazy_static! {
             // Encoding Precedence
             .op(Op::infix(add, Left) | Op::infix(subtract, Left))
             .op(Op::infix(multiply, Left) | Op::infix(divide, Left))
-            // TODO: Unary Minus
     };
 }
 
@@ -31,6 +30,7 @@ pub fn parse_expr(pairs: Pairs<Rule>) -> f32 {
             Rule::subtract => lhs - rhs,
             Rule::multiply => lhs * rhs,
             Rule::divide => lhs / rhs,
+            Rule::pow => lhs.powf(rhs),
             rule => unreachable!("Expr::parse expected infix operation, found {:?}", rule),
         })
         .parse(pairs)
