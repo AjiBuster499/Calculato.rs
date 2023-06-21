@@ -11,6 +11,7 @@ use crate::parser::calculate;
 
 pub(crate) struct App {
     display_equation: String,
+    // Test
 }
 
 #[derive(Debug, Clone)]

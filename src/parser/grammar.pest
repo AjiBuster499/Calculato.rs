@@ -1,4 +1,4 @@
-operation     = _{ add | subtract | divide | multiply |
+infix_operation     = _{ add | subtract | divide | multiply |
                    pow }
 	add       = {   "+"   }
     subtract  = {   "-"   }
@@ -6,17 +6,22 @@ operation     = _{ add | subtract | divide | multiply |
     multiply  = {   "*"   }
     pow       = {   "^"   }
 
-unary_operation = _{ log | ln | factorial }
-    log       = { "log" }
-    ln        = { "ln" }
+postfix_operation = _{ factorial }
     factorial = { "!" }
 
+prefix_operation= _{ log | ln | negative }
+    log       = { "log" }
+    ln        = { "ln"  }
+    negative  = {  "-"  }
 
-num          = @{ "-"? ~ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ |
+
+num          = @{ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ |
                    ASCII_DIGIT) ~ "."? ~ ASCII_DIGIT* }
                   
-term         = _{ unary_operation? ~ (num | "(" ~ expr ~ ")") }
-expr         = { term ~ (operation ~ term)* }
+term         = _{ prefix_operation? ~
+                  (num | "(" ~ expr ~ ")") ~
+                  postfix_operation? }
+expr         = { term ~ (infix_operation ~ term)* }
 calculation  = _{ SOI ~ expr ~ EOI }
 
 WHITESPACE = _{ " " }

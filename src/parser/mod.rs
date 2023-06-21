@@ -15,7 +15,7 @@ lazy_static::lazy_static! {
         PrattParser::new()
             // Encoding Precedence
             .op(Op::infix(add, Left) | Op::infix(subtract, Left))
-            .op(Op::infix(multiply, Left) | Op::infix(divide, Left))
+            .op(Op::infix(multiply, Left) | Op::infix(divide, Left) | Op::prefix(negative))
             .op(Op::infix(pow, Left) | Op::prefix(log) | Op::prefix(ln))
             .op(Op::postfix(factorial))
     };
@@ -39,6 +39,7 @@ fn parse_expr(pairs: Pairs<Rule>) -> f32 {
         .map_prefix(|op, rhs| match op.as_rule() {
             Rule::log => rhs.log10(),
             Rule::ln => rhs.ln(),
+            Rule::negative => rhs * -1_f32,
             rule => unreachable!("Expr::parse expected prefix operation, found {:?}", rule),
         })
         .map_postfix(|_lhs, op| match op.as_rule() {
