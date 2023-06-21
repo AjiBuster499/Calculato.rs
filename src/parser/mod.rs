@@ -54,7 +54,7 @@ pub(crate) fn calculate(equation: &str) -> f32 {
     let line = CalculatorParser::parse(Rule::calculation, equation);
     match line {
         Ok(mut l) => parse_expr(l.next().unwrap().into_inner()),
-        Err(e) => panic!("{e}"),
+        Err(e) => todo!("Handle Errors at Calculation: {e}"),
     }
 }
 

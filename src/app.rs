@@ -153,10 +153,14 @@ impl Application for App {
             equation,
             button(text("X").horizontal_alignment(Horizontal::Center)).on_press(Message::Exit)
         ];
+        // Scientific Functions
         let scientific_block = column![row![
             button(text("^").horizontal_alignment(Horizontal::Center))
                 .on_press(Message::SendToEquation("^".to_string()))
                 .width(Length::Fill),
+            button(text("^2").horizontal_alignment(Horizontal::Center))
+            .on_press(Message::SendToEquation("^2".to_string()))
+            .width(Length::Fill),
             button(text("log").horizontal_alignment(Horizontal::Center))
                 .on_press(Message::SendToEquation("log(".to_string()))
                 .width(Length::Fill),
@@ -174,7 +178,7 @@ impl Application for App {
             .width(Length::Fill),
             button(text(")").horizontal_alignment(Horizontal::Center))
             .on_press(Message::SendToEquation(")".to_string()))
-            .width(Length::Fill)
+            .width(Length::Fill),
         ],]
         .align_items(Alignment::Center);
         let content = column![
