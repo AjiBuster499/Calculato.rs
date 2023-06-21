@@ -90,10 +90,17 @@ fn factorial_test() {
 
 #[test]
 fn combination_test() {
-    let combination = calculate("-(2+3)^2*4-(3/8)+log10");
+    let combination = calculate("-(2*3)+7/5^2-log10");
     assert_eq!(
         combination,
-        (((-(2 + 3) ^ 2) * 4 - (3 / 8)) as f32 + 10_f32.log10()),
-        "Combination Assertion failed: -(2+3)^2 * 4 - (3/8) + log10 became {combination}"
+        -6.72,
+        "Combination Assertion failed: -(2*3) + 7/(5^2) - log10 became {combination}"
+    );
+
+    let other_combination = calculate("-(2*3)+(7/5)^2-log10");
+    assert_eq!(
+        other_combination,
+        -5.04,
+        "Combination Assertion failed: -(2*3) + (7/5)^2 - log10 became {other_combination}"
     );
 }

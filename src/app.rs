@@ -11,7 +11,6 @@ use crate::parser::calculate;
 
 pub(crate) struct App {
     display_equation: String,
-    // Test
 }
 
 #[derive(Debug, Clone)]
@@ -168,7 +167,16 @@ impl Application for App {
                 .on_press(Message::SendToEquation("!".to_string()))
                 .width(Length::Fill),
         ]
-        .align_items(Alignment::Center),];
+        .align_items(Alignment::Center),
+        row![
+            button(text("(").horizontal_alignment(Horizontal::Center))
+            .on_press(Message::SendToEquation("(".to_string()))
+            .width(Length::Fill),
+            button(text(")").horizontal_alignment(Horizontal::Center))
+            .on_press(Message::SendToEquation(")".to_string()))
+            .width(Length::Fill)
+        ],]
+        .align_items(Alignment::Center);
         let content = column![
             eq_row,
             scientific_block,
