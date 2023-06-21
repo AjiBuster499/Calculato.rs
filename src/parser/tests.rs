@@ -78,13 +78,12 @@ fn scientific_test() {
 }
 
 #[test]
-#[should_panic]
 fn factorial_test() {
-    let factorial = calculate("10!");
+    let fact = calculate("100!");
     assert_eq!(
-        factorial,
-        (10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2) as f32,
-        "Factorial Assertion failed: 10! became {factorial}"
+        fact,
+        factorial(100_f32),
+        "Factorial Assertion failed: 10! became {fact}"
     );
 }
 

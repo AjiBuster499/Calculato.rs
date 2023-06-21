@@ -42,12 +42,19 @@ fn parse_expr(pairs: Pairs<Rule>) -> f32 {
             Rule::negative => rhs * -1_f32,
             rule => unreachable!("Expr::parse expected prefix operation, found {:?}", rule),
         })
-        .map_postfix(|_lhs, op| match op.as_rule() {
+        .map_postfix(|lhs, op| match op.as_rule() {
             // TODO: Implement factorial function
-            Rule::factorial => todo!("Factorials are currently not implemented."),
+            Rule::factorial => factorial(lhs),
             rule => unreachable!("Expr::parse expected postfix operation, found {:?}", rule),
         })
         .parse(pairs)
+}
+
+fn factorial(num: f32) -> f32 {
+    if num == 0_f32 {
+        return 1_f32;
+    }
+    num * factorial(num - 1_f32)
 }
 
 pub(crate) fn calculate(equation: &str) -> f32 {
