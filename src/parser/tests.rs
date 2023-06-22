@@ -32,13 +32,13 @@ fn complex_arithmetic_test() {
     let answer2 = calculate(equation2);
 
     assert_eq!(
-        answer1, 102_f32,
+        answer1, 102_f64,
         "Order of Operations Assertion failed: \
             2 + 2 * 100 - 100 became: {answer1}"
     );
 
     assert_eq!(
-        answer2, 64.75_f32,
+        answer2, 64.75_f64,
         "Negative and Powers Assertion failed: \
             0 * -1 + 3 / 4 + 8^2 became: {answer2}"
     );
@@ -49,13 +49,13 @@ fn complex_arithmetic_test() {
 fn styling_test() {
     let solo_negative = calculate("-1");
     assert_eq!(
-        solo_negative, -1_f32,
+        solo_negative, -1_f64,
         "Solo Negative Assertion Failed: -1 became {solo_negative}"
     );
 
     let decimal_with_no_integer_prefix = calculate(".1");
     assert_eq!(
-        decimal_with_no_integer_prefix, 0.1_f32,
+        decimal_with_no_integer_prefix, 0.1_f64,
         "Decimal with no Integer Prefix Assertion failed: \
             .1 became {decimal_with_no_integer_prefix}"
     );
@@ -65,24 +65,24 @@ fn styling_test() {
 fn scientific_test() {
     let logarithm = calculate("log10");
     assert_eq!(
-        logarithm, 1_f32,
+        logarithm, 1_f64,
         "Logarithm_10 Assertion failed: log10 became {logarithm}"
     );
 
     let natural_log = calculate("ln10");
     assert_eq!(
         natural_log,
-        10_f32.ln(),
+        10_f64.ln(),
         "Natural Logarithm Assertion failed: ln10 became {natural_log}"
     );
 }
 
 #[test]
 fn factorial_test() {
-    let fact = calculate("100!");
+    let fact = calculate("10!") as i128;
     assert_eq!(
         fact,
-        factorial(100_f32),
+        (10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2),
         "Factorial Assertion failed: 10! became {fact}"
     );
 }

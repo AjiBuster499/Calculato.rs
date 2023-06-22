@@ -1,10 +1,12 @@
 infix_operation     = _{ add | subtract | divide | multiply |
-                   pow }
+                         pow |   comb   |  perm  }
 	add       = {   "+"   }
     subtract  = {   "-"   }
     divide    = {   "/"   }
     multiply  = {   "*"   }
     pow       = {   "^"   }
+    comb      = {  "nCr"  }
+    perm      = {  "nPr"  }
 
 postfix_operation = _{ factorial }
     factorial = { "!" }

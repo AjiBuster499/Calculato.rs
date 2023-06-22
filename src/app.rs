@@ -179,6 +179,12 @@ impl Application for App {
             button(text(")").horizontal_alignment(Horizontal::Center))
             .on_press(Message::SendToEquation(")".to_string()))
             .width(Length::Fill),
+            button(text("nPr").horizontal_alignment(Horizontal::Center))
+            .on_press(Message::SendToEquation("nPr".to_string()))
+            .width(Length::Fill),
+            button(text("nCr").horizontal_alignment(Horizontal::Center))
+            .on_press(Message::SendToEquation("nCr".to_string()))
+            .width(Length::Fill),
         ],]
         .align_items(Alignment::Center);
         let content = column![

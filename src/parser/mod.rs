@@ -1,7 +1,7 @@
-use pest::iterators::Pairs;
-use pest::pratt_parser::PrattParser;
-use pest::Parser;
+use pest::{iterators::Pairs, pratt_parser::PrattParser, Parser};
 use pest_derive::Parser;
+use num_bigint::BigInt;
+use num_traits::{FromPrimitive, ToPrimitive};
 
 #[derive(Parser)]
 #[grammar = "src/parser/grammar.pest"]
@@ -21,11 +21,11 @@ lazy_static::lazy_static! {
     };
 }
 
-fn parse_expr(pairs: Pairs<Rule>) -> f32 {
+fn parse_expr(pairs: Pairs<Rule>) -> f64 {
     PRATT_PARSER
         .map_primary(|primary| match primary.as_rule() {
-            Rule::num => primary.as_str().parse::<f32>().unwrap(),
-            Rule::expr => parse_expr(primary.into_inner()),
+            Rule::num => primary.as_str().parse::<f64>().unwrap(),
+            Rule::expr => parse_expr(primary.into_inner()).to_f64().unwrap(),
             rule => unreachable!("Expr::parse expected atom, found {:?}", rule),
         })
         .map_infix(|lhs, op, rhs| match op.as_rule() {
@@ -39,25 +39,26 @@ fn parse_expr(pairs: Pairs<Rule>) -> f32 {
         .map_prefix(|op, rhs| match op.as_rule() {
             Rule::log => rhs.log10(),
             Rule::ln => rhs.ln(),
-            Rule::negative => rhs * -1_f32,
+            Rule::negative => rhs * -1_f64,
             rule => unreachable!("Expr::parse expected prefix operation, found {:?}", rule),
         })
         .map_postfix(|lhs, op| match op.as_rule() {
-            // TODO: Implement factorial function
-            Rule::factorial => factorial(lhs),
+            Rule::factorial => factorial(&BigInt::from_f64(lhs).unwrap()).to_f64().expect("Failed to convert"),
             rule => unreachable!("Expr::parse expected postfix operation, found {:?}", rule),
         })
         .parse(pairs)
 }
 
-fn factorial(num: f32) -> f32 {
-    if num == 0_f32 {
-        return 1_f32;
-    }
-    num * factorial(num - 1_f32)
+fn factorial(num: &BigInt) -> BigInt {
+    let one = BigInt::from_i8(1).unwrap();
+    let zero = BigInt::from_i8(0).unwrap();
+    if *num == zero {
+        return one;
+    };
+    num * factorial(&(num - one))
 }
 
-pub(crate) fn calculate(equation: &str) -> f32 {
+pub(crate) fn calculate(equation: &str) -> f64 {
     let line = CalculatorParser::parse(Rule::calculation, equation);
     match line {
         Ok(mut l) => parse_expr(l.next().unwrap().into_inner()),
