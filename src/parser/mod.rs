@@ -1,7 +1,7 @@
-use pest::{iterators::Pairs, pratt_parser::PrattParser, Parser};
-use pest_derive::Parser;
 use num_bigint::BigInt;
 use num_traits::{FromPrimitive, ToPrimitive};
+use pest::{iterators::Pairs, pratt_parser::PrattParser, Parser};
+use pest_derive::Parser;
 
 #[derive(Parser)]
 #[grammar = "src/parser/grammar.pest"]
@@ -18,6 +18,7 @@ lazy_static::lazy_static! {
             .op(Op::infix(multiply, Left) | Op::infix(divide, Left) | Op::prefix(negative))
             .op(Op::infix(pow, Left) | Op::prefix(log) | Op::prefix(ln))
             .op(Op::postfix(factorial))
+            .op(Op::prefix(sin) | Op::prefix(cos) | Op::prefix(tan))
     };
 }
 
@@ -34,16 +35,23 @@ fn parse_expr(pairs: Pairs<Rule>) -> f64 {
             Rule::multiply => lhs * rhs,
             Rule::divide => lhs / rhs,
             Rule::pow => lhs.powf(rhs),
+            Rule::comb => todo!("Implement Combinations"),
+            Rule::perm => todo!("Implement Permutations"),
             rule => unreachable!("Expr::parse expected infix operation, found {:?}", rule),
         })
         .map_prefix(|op, rhs| match op.as_rule() {
             Rule::log => rhs.log10(),
             Rule::ln => rhs.ln(),
             Rule::negative => rhs * -1_f64,
+            Rule::sin => round_trig(rhs.to_radians().sin()),
+            Rule::cos => round_trig(rhs.to_radians().cos()),
+            Rule::tan => round_trig(rhs.to_radians().tan()),
             rule => unreachable!("Expr::parse expected prefix operation, found {:?}", rule),
         })
         .map_postfix(|lhs, op| match op.as_rule() {
-            Rule::factorial => factorial(&BigInt::from_f64(lhs).unwrap()).to_f64().expect("Failed to convert"),
+            Rule::factorial => factorial(&BigInt::from_f64(lhs).unwrap())
+                .to_f64()
+                .expect("Failed to convert"),
             rule => unreachable!("Expr::parse expected postfix operation, found {:?}", rule),
         })
         .parse(pairs)
@@ -56,6 +64,10 @@ fn factorial(num: &BigInt) -> BigInt {
         return one;
     };
     num * factorial(&(num - one))
+}
+
+fn round_trig(val: f64) -> f64 {
+    ((val * 100_f64).ceil()) / 100_f64
 }
 
 pub(crate) fn calculate(equation: &str) -> f64 {
