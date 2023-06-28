@@ -8,15 +8,15 @@ use iced::{
 use crate::parser::calculate;
 
 pub(crate) struct App {
-    display_equation: String,
     input: String,
+    display_equation: String,
 }
 
 #[derive(Debug, Clone)]
 pub(crate) enum Message {
     Calculate,
     SendToEquation(String),
-    // InputChanged(String),
+    InputChanged(String),
     Clear,
     Backspace,
     Exit,
@@ -34,8 +34,8 @@ impl Application for App {
     fn new(_flags: Self::Flags) -> (Self, Command<Message>) {
         (
             Self {
-                display_equation: String::new(),
                 input: String::new(),
+                display_equation: String::new(),
             },
             Command::none(),
         )
@@ -52,19 +52,21 @@ impl Application for App {
     fn update(&mut self, message: Self::Message) -> Command<Message> {
         match message {
             Message::Calculate => {
-                let answer = calculate(&self.display_equation);
+                let answer = calculate(&self.input);
                 self.display_equation = answer.to_string();
             }
             Message::SendToEquation(s) => {
-                // self.display_equation.push_str(&s);
-                self.display_equation = s;
+                self.input.push_str(&s);
             }
             Message::Exit => return window::close(),
             Message::Clear => {
-                self.display_equation.clear();
+                self.input.clear();
             }
             Message::Backspace => {
-                self.display_equation.pop();
+                self.input.pop();
+            }
+            Message::InputChanged(s) => {
+                self.input = s;
             }
         };
         Command::none()
@@ -75,8 +77,8 @@ impl Application for App {
             .horizontal_alignment(Horizontal::Center)
             .vertical_alignment(Vertical::Center)
             .width(Length::Fill);
-        let equation_in = text_input("Enter an equation...", &self.display_equation)
-            .on_input(Message::SendToEquation)
+        let equation_in = text_input("Enter an equation...", &self.input)
+            .on_input(Message::InputChanged)
             .on_submit(Message::Calculate);
         // Row containing the Equation
         let eq_row = column![
