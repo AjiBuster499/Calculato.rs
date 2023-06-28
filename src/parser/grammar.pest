@@ -1,14 +1,32 @@
-operation    = _{ add | subtract | divide | multiply }
-	add      = { "+" }
-    subtract = { "-" }
-    divide   = { "/" }
-    multiply = { "*" }
+infix_operation     = _{ add | subtract | divide | multiply |
+                         pow |   comb   |  perm  }
+	add       = {   "+"   }
+    subtract  = {   "-"   }
+    divide    = {   "/"   }
+    multiply  = {   "*"   }
+    pow       = {   "^"   }
+    comb      = {  "nCr"  }
+    perm      = {  "nPr"  }
 
-num          = @{ "-"? ~ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ |
+postfix_operation = _{ factorial }
+    factorial = { "!" }
+
+prefix_operation= _{ log | ln | negative | sin | cos | tan }
+    log       = { "log" }
+    ln        = { "ln"  }
+    negative  = {  "-"  }
+    sin       = {  "sin"  }
+    cos       = {  "cos"  }
+    tan       = {  "tan"  }
+
+
+num          = @{ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ |
                    ASCII_DIGIT) ~ "."? ~ ASCII_DIGIT* }
                   
-expr         = { term ~ (operation ~ term)* }
-term         = _{ num | "(" ~ expr ~ ")"  }
+term         = _{ prefix_operation? ~
+                  (num | "(" ~ expr ~ ")") ~
+                  postfix_operation? }
+expr         = { term ~ (infix_operation ~ term)* }
 calculation  = _{ SOI ~ expr ~ EOI }
 
 WHITESPACE = _{ " " }

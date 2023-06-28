@@ -1,5 +1,4 @@
 mod app;
-mod calculator;
 mod parser;
 
 use app::App;
