@@ -9,12 +9,14 @@ use crate::parser::calculate;
 
 pub(crate) struct App {
     display_equation: String,
+    input: String,
 }
 
 #[derive(Debug, Clone)]
 pub(crate) enum Message {
     Calculate,
     SendToEquation(String),
+    // InputChanged(String),
     Clear,
     Backspace,
     Exit,
@@ -33,6 +35,7 @@ impl Application for App {
         (
             Self {
                 display_equation: String::new(),
+                input: String::new(),
             },
             Command::none(),
         )
@@ -53,7 +56,8 @@ impl Application for App {
                 self.display_equation = answer.to_string();
             }
             Message::SendToEquation(s) => {
-                self.display_equation.push_str(&s);
+                // self.display_equation.push_str(&s);
+                self.display_equation = s;
             }
             Message::Exit => return window::close(),
             Message::Clear => {
@@ -71,7 +75,7 @@ impl Application for App {
             .horizontal_alignment(Horizontal::Center)
             .vertical_alignment(Vertical::Center)
             .width(Length::Fill);
-        let equation_in = text_input("Enter an equation...", "")
+        let equation_in = text_input("Enter an equation...", &self.display_equation)
             .on_input(Message::SendToEquation)
             .on_submit(Message::Calculate);
         // Row containing the Equation
