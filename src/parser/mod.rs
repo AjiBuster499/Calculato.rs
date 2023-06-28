@@ -67,7 +67,7 @@ fn factorial(num: &BigInt) -> BigInt {
 }
 
 fn round_trig(val: f64) -> f64 {
-    ((val * 100_f64).ceil()) / 100_f64
+    ((val * 100_f64).round()) / 100_f64
 }
 
 pub(crate) fn calculate(equation: &str) -> f64 {
