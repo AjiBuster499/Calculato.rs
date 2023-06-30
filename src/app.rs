@@ -122,6 +122,14 @@ impl Application for App {
                     .on_press(Message::SendToEquation("nCr".to_string()))
                     .width(Length::Fill),
             ],
+            row![
+                button(text("e").horizontal_alignment(Horizontal::Center))
+                    .on_press(Message::SendToEquation("e".to_string()))
+                    .width(Length::Fill),
+                button(text("π").horizontal_alignment(Horizontal::Center))
+                    .on_press(Message::SendToEquation("π".to_string()))
+                    .width(Length::Fill),
+            ],
         ]
         .align_items(Alignment::Center);
         // Main content block

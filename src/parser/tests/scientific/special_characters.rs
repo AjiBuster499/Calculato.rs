@@ -17,4 +17,9 @@ fn pi_test() {
         pi == consts::PI,
         "Pi Assertion Failed: Pi was calculated as {pi}"
     );
+    let pi = calculate("π");
+    assert!(
+        pi == consts::PI,
+        "Pi Assertion Failed: Pi was calculated as {pi}"
+    );
 }

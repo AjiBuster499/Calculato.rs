@@ -29,7 +29,7 @@ fn parse_expr(pairs: Pairs<Rule>) -> f64 {
             Rule::num => primary.as_str().parse::<f64>().unwrap_or_else(|_| {
                 match primary.as_str() {
                     "e" => Ok(consts::E),
-                    "pi" => Ok(consts::PI),
+                    "pi" | "π" => Ok(consts::PI),
                     _ => Err("Unknown non-float value: COMING SOON"),
                 }
                 .unwrap()
