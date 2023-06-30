@@ -124,6 +124,7 @@ impl Application for App {
             ],
         ]
         .align_items(Alignment::Center);
+        // Main content block
         let content = column![
             eq_row,
             scientific_block,
