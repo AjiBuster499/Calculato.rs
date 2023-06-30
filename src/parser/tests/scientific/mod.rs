@@ -1,5 +1,6 @@
 use super::*;
 
+mod special_characters;
 mod trig;
 
 #[test]

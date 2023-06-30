@@ -2,6 +2,7 @@ use num_bigint::BigInt;
 use num_traits::{FromPrimitive, ToPrimitive};
 use pest::{iterators::Pairs, pratt_parser::PrattParser, Parser};
 use pest_derive::Parser;
+use std::f64::consts;
 
 #[derive(Parser)]
 #[grammar = "src/parser/grammar.pest"]
@@ -25,7 +26,14 @@ lazy_static::lazy_static! {
 fn parse_expr(pairs: Pairs<Rule>) -> f64 {
     PRATT_PARSER
         .map_primary(|primary| match primary.as_rule() {
-            Rule::num => primary.as_str().parse::<f64>().unwrap(),
+            Rule::num => primary.as_str().parse::<f64>().unwrap_or_else(|_| {
+                match primary.as_str() {
+                    "e" => Ok(consts::E),
+                    "pi" => Ok(consts::PI),
+                    _ => Err("Unknown non-float value: COMING SOON"),
+                }
+                .unwrap()
+            }),
             Rule::expr => parse_expr(primary.into_inner()).to_f64().unwrap(),
             rule => unreachable!("Expr::parse expected atom, found {:?}", rule),
         })

@@ -21,7 +21,9 @@ prefix_operation= _{ log | ln | negative | sin | cos | tan }
 
 
 num          = @{ (ASCII_NONZERO_DIGIT ~ ASCII_DIGIT+ |
-                   ASCII_DIGIT) ~ "."? ~ ASCII_DIGIT* }
+                   ASCII_DIGIT) ~ "."? ~ ASCII_DIGIT* |
+                   "e" | "pi"
+                }
                   
 term         = _{ prefix_operation? ~
                   (num | "(" ~ expr ~ ")") ~
